@@ -1,0 +1,40 @@
+# hello-world.yaml
+
+name: hello-world-python
+version: v1
+type: service
+# tags:
+# - service
+# - python-stack
+description: Hello World Python App on DataOS
+workspace: public
+
+service:
+  servicePort: 8050
+  replicas: 1
+  ingress:
+    enabled: true
+    path: /queries/public:callback-maintenance/success_rate_percentage
+    noAuthentication: true
+  compute: runnable-default
+  resources:
+    requests:
+      cpu: 500m
+      memory: 512Mi
+
+  # use the Python stack
+  stack: python3:1.0 # python3:1.0 this is wrong check the deployed python stack 
+  loglevel: INFO
+  envs:
+    LENS2_BASE_URL: 'https://liberal-katydid.dataos.app/lens2/api'  #enviroment or context name fqdn along with lens2/api
+    LENS2_METRIC_NAME: 'success_rate_percentage'  #metic name
+    LENS2_NAME: 'public:callback-maintenance'  #lens name with workspace and a proper format
+  dataosSecrets:
+  - name: git-secret-dj  #repo secrets
+    allKeys: true     
+    consumptionType: envVars   #didnt understood it
+  # repository details
+  stackSpec:
+    repo:
+      url: " https://bitbucket.org/rubik_/queries.git" #clone this repo
+      # baseDir: "code"
